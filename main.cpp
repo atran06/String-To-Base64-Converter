@@ -1,3 +1,13 @@
+/*********************************************************************************************
+ * String to Binary and Base64 Converter
+ *
+ * File: main.cpp
+ * Desc: Converts a given string to either Binary or Base64.
+ * Date: 10-23-18
+ * Author: Arthur Tran
+ * Website: https://arthurtran.com/
+ *********************************************************************************************/
+
 #include <string>
 #include <iostream>
 #include <math.h>
@@ -6,9 +16,18 @@
 using namespace std;
 
 const string base64Table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012456789+/";
-const int base64BinaryLength = 6;
-const int regularBinaryLength = 8;
+const int base64BinaryLength = 6; //base64 takes binary numbers in groups of 6
+const int regularBinaryLength = 8; //normal binary representation of a number is in groups of 8
 
+/*
+ * Function: getLargestPossbleNumber()
+ * Desc: Given the number of places, function returns the largest possible number
+ *       that can be obtained. (Ex. 6, 111111 = 63)
+ * Params:
+ *   binaryPlaces - How many places the binary number is. Ex. 6 = 000000
+ * Returns: Returns the largest possible number that can be had with the number of
+ *          places.
+ */
 int getLargestPossbleNumber(int binaryPlaces) {
      int sum = 0;
      for(int i = pow(2, binaryPlaces - 1); i >= 1; i /= 2) {
@@ -17,30 +36,45 @@ int getLargestPossbleNumber(int binaryPlaces) {
      return sum;
 }
 
-
+/*
+ * Function: numberToBinary()
+ * Desc: Converts a given base 10 number to binary
+ * Params:
+ *   number - Base 10 number to convert
+ *   binaryPlaces - How many places the binary number is. Ex. 6 = 000000
+ * Returns: Returns the given number in binary.
+ */
 string numberToBinary(int number, int binaryPlaces) {
      int currentPlace = pow(2, binaryPlaces - 1);
      int currentNum = 0;
-     string bin = "";
+     string binary = "";
 
      if(number <= getLargestPossbleNumber(binaryPlaces)) {
           while(binaryPlaces > 0) {
                if(currentNum + currentPlace == number) {
                     currentNum += currentPlace;
-                    bin += "1";
+                    binary += "1";
                } else if(currentNum + currentPlace < number) {
                     currentNum += currentPlace;
-                    bin += "1";
+                    binary += "1";
                } else {
-                    bin += "0";
+                    binary += "0";
                }
                currentPlace /= 2;
                binaryPlaces -= 1;
           }
      }
-     return bin;
+     return binary;
 }
 
+/*
+ * Function: binaryToNumber()
+ * Desc: Given a binary string, converts it a base 10 number.
+ * Params:
+ *   binary - The binary string to convert
+ *   binaryPlaces - How many places the binary number is. Ex. 6 = 000000
+ * Returns: Returns the given binary string in base 10
+ */
 int binaryToNumber(string binary, int binaryPlaces) {
      int originalPlaces = binaryPlaces;
      int currentPlace = pow(2, binaryPlaces - 1);
