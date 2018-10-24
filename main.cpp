@@ -152,10 +152,21 @@ string base64ToString(string base64) {
      return binaryToString(base64ToBinary(base64), regularBinaryLength);
 }
 
+string numberToBase64(int number) {
+     int power = 0;
+     while(pow(64, power) <= number) {
+          power++;
+     }
+     cout << power << endl;
+     return "";
+}
+
 int main() {
-     string stringToChange = "Arthur";
+     string stringToChange = "Ian";
      cout << stringToChange << " in binary is " << stringToBinary(stringToChange, regularBinaryLength) << endl;
      cout << stringToChange << " in base64 is " << stringToBase64(stringToChange) << endl;
+
+     numberToBase64(3);
 
      return 0;
 }
