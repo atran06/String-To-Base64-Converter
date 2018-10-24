@@ -15,7 +15,7 @@
 
 using namespace std;
 
-const string base64Table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012456789+/";
+const string base64Table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const int base64BinaryLength = 6; //base64 takes binary numbers in groups of 6
 const int regularBinaryLength = 8; //normal binary representation of a number is in groups of 8
 
@@ -34,6 +34,16 @@ int getLargestPossbleNumber(int binaryPlaces) {
           sum += i;
      }
      return sum;
+}
+
+int getMaxBase64Places(int number, int power, int sum) {
+     if(sum >= number) return power;
+     return getMaxBase64Places(number, power += 1, sum += pow(64, power));
+}
+
+int getMaxBase2Places(int number, int power, int sum) {
+     if(sum >= number) return power;
+     return getMaxBase2Places(number, power += 1, sum += pow(2, power));
 }
 
 /*
@@ -62,6 +72,30 @@ string numberToBinary(int number, int binaryPlaces) {
                }
                currentPlace /= 2;
                binaryPlaces -= 1;
+          }
+     }
+     return binary;
+}
+
+string numberToBinary(int number) {
+     int maxPlaces = getMaxBase2Places(number, 0, 0);
+     int currentPlace = pow(2, maxPlaces - 1);
+     int currentNum = 0;
+     string binary = "";
+
+     if(number <= getLargestPossbleNumber(maxPlaces)) {
+          while(maxPlaces > 0) {
+               if(currentNum + currentPlace == number) {
+                    currentNum += currentPlace;
+                    binary += "1";
+               } else if(currentNum + currentPlace < number) {
+                    currentNum += currentPlace;
+                    binary += "1";
+               } else {
+                    binary += "0";
+               }
+               currentPlace /= 2;
+               maxPlaces -= 1;
           }
      }
      return binary;
@@ -152,21 +186,26 @@ string base64ToString(string base64) {
      return binaryToString(base64ToBinary(base64), regularBinaryLength);
 }
 
-string numberToBase64(int number) {
-     int power = 0;
-     while(pow(64, power) <= number) {
-          power++;
-     }
-     cout << power << endl;
-     return "";
-}
+// string numberToBase64(int number) {
+//      int maxPlaces = getMaxBase64Places(number, 0, 0);
+//      string numInBase64 = "";
+//
+//      for(int i = maxPlaces - 1; i >= 0; i--) {
+//           int placeValue = pow(64, i);
+//           cout << number / 65 << endl;
+//           numInBase64 += base64Table[number / 65];
+//           number %= 65;
+//      }
+//
+//      return numInBase64;
+// }
 
 int main() {
      string stringToChange = "Ian";
      cout << stringToChange << " in binary is " << stringToBinary(stringToChange, regularBinaryLength) << endl;
      cout << stringToChange << " in base64 is " << stringToBase64(stringToChange) << endl;
 
-     numberToBase64(3);
+     cout << numberToBase64(64) << endl;
 
      return 0;
 }
